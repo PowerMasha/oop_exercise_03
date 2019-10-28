@@ -72,7 +72,7 @@ Rectangle::Rectangle(std::istream& in) {
   BCD = (b * b + c * c - d1 * d1) / 2 * b * c;
   CDA = (d * d + c * c - d2 * d2) / 2 * d * c;
   DAB = (a * a + d * d - d1 * d1) / 2 * a * d;
-  if(ABC != BCD || ABC != CDA || ABC != DAB)
+  if(ABC != BCD || ABC != CDA || ABC !=DAB)
     throw std::logic_error("Это не прямоугольник!");
 }
 
@@ -94,10 +94,7 @@ Trapeze::Trapeze() : A1{0, 0}, B2{0, 0}, C3{0, 0}, D4{0,0} {}
 
 Trapeze::Trapeze(std::istream& in) {
   in >> A1 >> B2 >> C3 >> D4;
-  double a, c;
-  a = sqrt(pow((B2.X()- A1.X()),2) + pow((B2.Y() - A1.Y()),2));
-  c = sqrt(pow((C3.X()- D4.X()),2) + pow((C3.Y() - D4.Y()),2));
-  if(a != c || (C3.Y()-B2.Y())/(C3.X()-B2.X())!=(D4.Y()-A1.Y())/(D4.X()-A1.X()))
+  if((C3.Y()-B2.Y())/(C3.X()-B2.X())!=(D4.Y()-A1.Y())/(D4.X()-A1.X()))
     throw std::logic_error("Это не трапеция!");
 }
 
@@ -110,17 +107,7 @@ double p = abs(A1.X()*B2.Y()+B2.X()*C3.Y()+C3.X()*D4.Y()+D4.X()*A1.Y()-B2.X()*A1
 
 Point Trapeze::center() const
 {
-  double a = sqrt((C3.X() - B2.X()) * (C3.X() - B2.X()) + (B2.Y() - C3.Y()) * (B2.Y() - C3.Y()));
-  double b = sqrt((B2.X() - A1.X()) * (B2.X() - A1.X()) + (B2.Y() - A1.Y()) * (B2.Y() - A1.Y()));
-  double l = sqrt((D4.X() - A1.X()) * (D4.X() - A1.X()) + (A1.Y() - D4.Y()) * (A1.Y() - D4.Y()));
-  double c = (l - a) / 2;
-  double h = sqrt((b * b) - (c * c));
-  double y_ = (2 * l + a) * h / (a + l) / 3;
-  if (B2.X() == C3.X() && D4.X() < C3.X())
-    return Point{D4.X() + h - y_, (A1.Y() + B2.Y() + C3.Y() + D4.Y()) / 4};
-  if (B2.X() == C3.X() && C3.X() < D4.X())
-    return Point{C3.X() + h - y_, (A1.Y() + B2.Y() + C3.Y() + D4.Y()) / 4};
-  return Point{(A1.X() + B2.X() + C3.X() + D4.X()) / 4, (B2.Y() + C3.Y()) / 2 - ((B2.Y() + C3.Y()) / 2 - (D4.Y() + A1.Y()) / 2) * y_ / h};
+  return Point{(A1.X() + B2.X() + C3.X() + D4.X()) / 4, (A1.Y() + B2.Y() + C3.Y() + D4.Y()) / 4};
 }
 
 std::ostream& Trapeze::print(std::ostream& out) const
